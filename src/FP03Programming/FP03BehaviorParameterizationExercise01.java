@@ -9,13 +9,14 @@ public class FP03BehaviorParameterizationExercise01 {
 
         List<Integer> numbers = List.of(23, 56, 90, 12, 38, 38);
 
-        Function<Integer, Integer> squaredFunction = x -> x * x;
+        List<Integer> squaredNumbers = mapAndCreate(numbers, x -> x * x);
 
-        Function<Integer, Integer> cubedFunction = x -> x * x * x;
-        System.out.println(cubedFunction);
+        List<Integer> cubedNumbers = mapAndCreate(numbers, x -> x * x * x);
+
+        System.out.println(squaredNumbers);
     }
 
-    private static List<Integer> mapAndCreateNewList(List<Integer> numbers, Function<Integer, Integer> squaredFunction) {
+    private static List<Integer> mapAndCreate(List<Integer> numbers, Function<Integer, Integer> squaredFunction) {
         return numbers.stream()
                 .map(squaredFunction)
                 .collect(Collectors.toList());
