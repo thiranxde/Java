@@ -164,5 +164,62 @@ public class FP04CustomClass {
                         .findAny());
         // Finds ant list elements meets the above criteria (reviewScoreGreaterThan90Predicate)
         // Optional[Spring:20000:98]
+
+        System.out.println(
+                courses.stream()
+                        .filter(reviewScoreGreaterThan90Predicate)
+                        .mapToInt(course -> course.getNoOfStudents())
+                        .sum()); //159000
+
+        System.out.println(
+                courses.stream()
+                        .filter(reviewScoreGreaterThan90Predicate)
+                        .mapToInt(course -> course.getNoOfStudents())
+                        .average());// OptionalDouble[19875.0]
+
+        System.out.println(
+                courses.stream()
+                        .filter(reviewScoreGreaterThan90Predicate)
+                        .mapToInt(course -> course.getNoOfStudents())
+                        .count()); // 8
+
+        System.out.println(
+                courses.stream()
+                        .filter(reviewScoreGreaterThan90Predicate)
+                        .mapToInt(course -> course.getNoOfStudents())
+                        .max());// OptionalInt[25000]
+
+        System.out.println(
+                courses.stream()
+                        .filter(reviewScoreGreaterThan90Predicate)
+                        .mapToInt(course -> course.getNoOfStudents())
+                        .min());// OptionalInt[14000]
+
+        System.out.println(
+                courses.stream()
+                        .collect(Collectors.groupingBy(Course::getCategory)));
+        //{Cloud=[AWS:21000:92, Azure:21000:99, Docker:20000:92, Kubernetes:20000:91], FullStack=[FullStack:14000:91], Microservices=[API:25000:96], Framework=[Spring:20000:98, Spring Boot:18000:95]}
+        System.out.println(
+                courses.stream()
+                        .collect(Collectors.groupingBy(Course::getCategory, Collectors.counting())));
+        //{Cloud=4, FullStack=1, Microservices=1, Framework=2}
+
+        System.out.println(
+                courses.stream()
+                        .collect(Collectors.groupingBy(Course::getCategory, Collectors.maxBy(Comparator.comparing(Course::getReviewScore)))));
+        //{Cloud=Optional[Azure:21000:99], FullStack=Optional[FullStack:14000:91], Microservices=Optional[API:25000:96], Framework=Optional[Spring:20000:98]}
+
+
+        System.out.println(
+                courses.stream()
+                        .collect(Collectors.groupingBy(Course::getCategory, Collectors.mapping(Course::getName,Collectors.toList()))));
+        //{Cloud=[AWS, Azure, Docker, Kubernetes], FullStack=[FullStack], Microservices=[API], Framework=[Spring, Spring Boot]}
+
+        Predicate<Course> reviewScoreGreaterThan95Predicate2 = getCoursePredicate2(95);
+        Predicate<Course> reviewScoreGreaterThan90Predicate2 = getCoursePredicate2(90);
+    }
+
+    private static Predicate<Course> getCoursePredicate2(int cutOffReviewScore) {
+        return course -> course.getReviewScore() > cutOffReviewScore;
     }
 }
